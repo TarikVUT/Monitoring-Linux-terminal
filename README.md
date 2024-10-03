@@ -4,7 +4,8 @@
 
 # Monitoring-Linux-terminal
 
-![image](https://github.com/user-attachments/assets/71ed1185-9cf4-4af5-8e51-89db0ef9443e)
+
+
 
 
 **Introduction**
