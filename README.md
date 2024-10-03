@@ -73,7 +73,47 @@ This method uses rsyslog to capture and forward terminal input.
    - Rotation via RELP
    - Rotation over TLS
 
+   #### Rotation via UDP
+  - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+      
+      ```bash
+      $ModLoad imfile
+      $InputFilePollInterval 3
+      $InputFileName /var/log/history.log
+      $InputFileTag test-error
+      $InputFileStateFile stat-test-error
+      $InputFileSeverity error
+      $InputFileFacility local3
+      $InputRunFileMonitor
+      local3.* @test_server_IP:514
+      ```
+   Rsyslog will send the logs from log file "/var/log/history.log" to test_server_IP (server) via UPD, port 514. The sent logs have Facility "local3".
 
+   To send via udp use @, for TCP @@.
+   - Restart the rsyslog service.
+       ```bash
+        # service rsyslog restart
+        ``` 
+
+#### Rotation via TCP
+- Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+      ```bash
+      $ModLoad imfile
+      $InputFilePollInterval 3
+      $InputFileName /var/log/history.log
+      $InputFileTag test-error
+      $InputFileStateFile stat-test-error
+      $InputFileSeverity error
+      $InputFileFacility local3
+      $InputRunFileMonitor
+      local3.* @@test_server_IP:514
+      ```
+- Restart the rsyslog service.
+       ```bash
+        # service rsyslog restart
+        ``` 
+#### Rotation via RELP
+#### Rotation over TLS
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
  <a name="audit-rsyslog"></a>
    
