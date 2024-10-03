@@ -60,7 +60,7 @@ The following functionalities are already implemented:
  - [ ] Collecting user input via auditd and sending logs to a remote server:
    - [ ] Configuring auditd on the client for input collection.
    - [ ] Configuring auditd on the server to receive logs.
- - [ ]Using a script to collect history data and send it via rsync:
+ - [ ] Using a script to collect history data and send it via rsync:
    - [ ] Script creation for collecting terminal history.
    - [ ] Configuring the server to receive logs via rsync.
 
