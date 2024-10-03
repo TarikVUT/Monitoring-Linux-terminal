@@ -94,7 +94,9 @@ This method uses rsyslog to capture and forward terminal input.
      
       ```bash
       # service rsyslog restart
-      ``` 
+      ```
+      ![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/1-udp%20logs%20rsyslog.png)
+      
 
 #### Rotation via TCP
 - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
