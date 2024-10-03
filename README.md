@@ -24,14 +24,15 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 # Methods of Collection
 
-**1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
-2. Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog
-3. Collecting User Input Using auditd and Sending Logs Directly via Audit
-4. Using a Script to Collect History Data and Send it to a Remote Server via rsync**
+1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](rsyslog-rsyslog)
+2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](audit-rsyslog)
+3. [**Collecting User Input Using auditd and Sending Logs Directly via Audit**](audit-audit)
+4. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](code-rsync)
 
 --------------------------------------------
 
 ## 1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
+<a name="rsyslog-rsyslog"></a>
 This method uses rsyslog to capture and forward terminal input.
 **Steps:**
 ### 1. Configure rsyslog on the client to capture user input from the terminal.
@@ -74,7 +75,7 @@ This method uses rsyslog to capture and forward terminal input.
 
 
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
- 
+ <a name="audit-rsyslog"></a>
    
 
 ## 2. Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog
@@ -87,6 +88,7 @@ With auditd, the system's audit framework tracks user actions, and rsyslog sends
 
    
 ## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
+ <a name="audit-auditg"></a>
 This approach uses auditd to collect input and directly sends logs to the remote server.
 
 **Steps:**
@@ -95,6 +97,7 @@ This approach uses auditd to collect input and directly sends logs to the remote
 2. Configure auditd on the server to receive logs from the client.
 
 ## 4. Using a Script to Collect History Data and Send it to a Remote Server via rsync
+ <a name="code-rsync"></a>
 This method collects terminal history using shell scripts and transfers logs using rsync.
 
 **Steps:**
