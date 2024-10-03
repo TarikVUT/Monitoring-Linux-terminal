@@ -116,10 +116,34 @@ This method uses rsyslog to capture and forward terminal input.
 #### Rotation via RELP
 #### Rotation over TLS
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
- <a name="audit-rsyslog"></a>
+1- Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
+
+```bash
+$ModLoad imtcp
+$InputTCPServerRun 514
+
+Note: If using UDP then uncomment the following lines 
+
+$ModLoad imudp
+$UDPServerRun 514
+
+```
+2-  Configure the rsyslog server to receive events/logs from the client:
+
+Add the following line "/etc/rsyslog.d/history_client.conf"
+
+```bash
+if ($syslogfacility-text == 'local3') then {
+/var/log/histroy.log
+stop
+}
+```
+The config will save all received logs to "/var/log/histroy.log" on the server side
    
+---------------------------
 
 ## 2. Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog
+<a name="audit-rsyslog"></a>
 With auditd, the system's audit framework tracks user actions, and rsyslog sends these logs to the server.
 
 **Steps:**
