@@ -91,6 +91,7 @@ This method uses rsyslog to capture and forward terminal input.
 
    To send via udp use @, for TCP @@.
    - Restart the rsyslog service.
+     
       ```bash
       # service rsyslog restart
       ``` 
@@ -98,7 +99,7 @@ This method uses rsyslog to capture and forward terminal input.
 #### Rotation via TCP
 - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
   
-      ```bash
+  ```bash
       $ModLoad imfile
       $InputFilePollInterval 3
       $InputFileName /var/log/history.log
@@ -108,11 +109,12 @@ This method uses rsyslog to capture and forward terminal input.
       $InputFileFacility local3
       $InputRunFileMonitor
       local3.* @@test_server_IP:514
-      ```
+  ```
 - Restart the rsyslog service.
-       ```bash
+
+    ```bash
         # service rsyslog restart
-        ``` 
+    ``` 
 #### Rotation via RELP
 #### Rotation over TLS
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
