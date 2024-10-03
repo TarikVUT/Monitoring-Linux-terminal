@@ -4,6 +4,9 @@
 
 # Monitoring-Linux-terminal
 
+![image](https://github.com/user-attachments/assets/71ed1185-9cf4-4af5-8e51-89db0ef9443e)
+
+
 **Introduction**
 
 This project provides a comprehensive solution for monitoring and logging terminal input on Linux systems. It demonstrates how to collect and send user input from a client machine to a remote server for centralized logging and auditing. The solution leverages various tools, such as rsyslog, auditd, and rsync, offering multiple approaches depending on your needs. This setup is useful for system administrators who want to track user activities on terminals for security, auditing, or compliance purposes.
@@ -26,7 +29,7 @@ This project provides a comprehensive solution for monitoring and logging termin
 ## 1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
 This method uses rsyslog to capture and forward terminal input.
 **Steps:**
-1. Configure rsyslog on the client to capture user input from the terminal.
+### 1. Configure rsyslog on the client to capture user input from the terminal.
    To install the rsyslog package in Fedora, use the following command:
    ```bash
    # dnf install -y rsyslog
@@ -65,7 +68,7 @@ This method uses rsyslog to capture and forward terminal input.
    - Rotation over TLS
 
 
-2. Set up rsyslog on the server to receive and categorize logs from the client.
+### 2. Set up rsyslog on the server to receive and categorize logs from the client.
  
    
 
