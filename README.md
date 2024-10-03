@@ -3,7 +3,7 @@
 
 
 # Monitoring-Linux-terminal
-
+![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/UDP-rsyslog.png)
 
 
 
