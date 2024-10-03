@@ -54,7 +54,7 @@ This method uses rsyslog to capture and forward terminal input.
    ```
    This will save all bash history for the user in "/var/log/history.log"
 
-   **Send logs to another server**\n
+   **Send logs to another server** \n
    When it comes to rotating logs to another server, you can configure rsyslog to forward logs to a remote server. To do this, you need to edit the /etc/rsyslog.conf configuration file or create a new configuration file in the /etc/rsyslog.d/ directory.
    There are several ways to send protocols from client to server.
 
