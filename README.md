@@ -12,18 +12,22 @@
 
 This project provides a comprehensive solution for monitoring and logging terminal input on Linux systems. It demonstrates how to collect and send user input from a client machine to a remote server for centralized logging and auditing. The solution leverages various tools, such as rsyslog, auditd, and rsync, offering multiple approaches depending on your needs. This setup is useful for system administrators who want to track user activities on terminals for security, auditing, or compliance purposes.
 
+--------------------------------------------
+
 **Features**
 
 . Collect terminal input using rsyslog, auditd, or shell history.
 . Automatically send the collected logs to a remote server for centralized storage and analysis.
 . Flexible setup options for different environments and security requirements.
 
+--------------------------------------------
+
 # Methods of Collection
 
-1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
+**1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
 2. Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog
 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
-4. Using a Script to Collect History Data and Send it to a Remote Server via rsync
+4. Using a Script to Collect History Data and Send it to a Remote Server via rsync**
 
 --------------------------------------------
 
