@@ -91,12 +91,13 @@ This method uses rsyslog to capture and forward terminal input.
 
    To send via udp use @, for TCP @@.
    - Restart the rsyslog service.
-       ```bash
-        # service rsyslog restart
-        ``` 
+      ```bash
+      # service rsyslog restart
+      ``` 
 
 #### Rotation via TCP
 - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+  
       ```bash
       $ModLoad imfile
       $InputFilePollInterval 3
