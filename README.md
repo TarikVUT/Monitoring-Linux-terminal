@@ -16,9 +16,9 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 **Features**
 
-. Collect terminal input using rsyslog, auditd, or shell history.
-. Automatically send the collected logs to a remote server for centralized storage and analysis.
-. Flexible setup options for different environments and security requirements.
+ . Collect terminal input using rsyslog, auditd, or shell history.
+ . Automatically send the collected logs to a remote server for centralized storage and analysis.
+ . Flexible setup options for different environments and security requirements.
 
 --------------------------------------------
 
