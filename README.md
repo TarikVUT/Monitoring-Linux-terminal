@@ -233,7 +233,24 @@ This method collects terminal history using shell scripts and transfers logs usi
    ![The history of user](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/output_of_bashrc_script.png)
    
 3. Set up the server to receive the history logs via rsync.
-
+   1- Set Up SSH Authentication (if necessary)
+   If you're copying files over SSH, it's better to use SSH keys for authentication rather than typing your password repeatedly.
+       1. Generate an SSH key (on the client side):
+      ```bash
+        ssh-keygen -t rsa
+      ```
+      2. Copy the SSH key to the server:
+      ```bash
+        ssh-copy-id user@server_address
+      ```
+  2- Continuously Sync with a Loop
+  To make this process continuous, you can use a loop in the terminal. Here's an example using a bash loop:
+   ```bash
+       while true; do
+       rsync -avz /path/to/local/file user@server_address:/path/to/remote/destination
+       sleep 5  # Wait for 5 seconds 
+       done
+   ```  
 # Current state of the solution
 
 The following functionalities are already implemented:
