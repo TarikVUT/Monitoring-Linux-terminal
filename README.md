@@ -16,9 +16,11 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 **Features**
 
-. Collect terminal input using rsyslog, auditd, or shell history.
-. Automatically send the collected logs to a remote server for centralized storage and analysis.
-. Flexible setup options for different environments and security requirements.
+ . Collect terminal input using rsyslog, auditd, or shell history.
+ 
+ . Automatically send the collected logs to a remote server for centralized storage and analysis.
+ 
+ . Flexible setup options for different environments and security requirements.
 
 --------------------------------------------
 
@@ -94,7 +96,9 @@ This method uses rsyslog to capture and forward terminal input.
      
       ```bash
       # service rsyslog restart
-      ``` 
+      ```
+      ![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/1-udp%20logs%20rsyslog.png)
+      
 
 #### Rotation via TCP
 - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
