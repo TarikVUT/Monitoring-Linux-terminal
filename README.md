@@ -98,7 +98,6 @@ This method uses rsyslog to capture and forward terminal input.
       ```bash
       # service rsyslog restart
       ```
-     [//]: # ( ![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/1-udp%20logs%20rsyslog.png))
      
 #### The demonstration video
 
@@ -191,6 +190,12 @@ refer to [Send via UDP](#send-udp), with changing "$InputFileName /var/log/histo
 
 3. Set up rsyslog on the server to receive logs from the client.
    Refer to [Set up rsyslog on the server to receive and categorize logs from the client](#receive_rsyslog_udp/tcp)
+
+#### The demonstration video
+
+
+https://github.com/user-attachments/assets/37a52888-7c08-45dc-b505-984b5562d9f3
+
 
    
 ## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
