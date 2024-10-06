@@ -230,7 +230,7 @@ This method collects terminal history using shell scripts and transfers logs usi
    source ~/.bashrc
    ```
    #### The demonstration image
-   ![The history of user](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/output_of_bashrc_script.png=x250)
+   ![The history of user](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/output_of_bashrc_script.png =x250)
    
 3. Set up the server to receive the history logs via rsync.
    1- Set Up SSH Authentication (if necessary)
