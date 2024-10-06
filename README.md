@@ -162,6 +162,8 @@ The config will save all received logs to "/var/log/histroy.log" on the server s
 <a name="audit-rsyslog"></a>
 With auditd, the system's audit framework tracks user actions, and rsyslog sends these logs to the server.
 
+<img src="https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/audid.png" width="700" />
+
 
 **Steps:**
 
@@ -215,6 +217,8 @@ This approach uses auditd to collect input and directly sends logs to the remote
 ## 4. Using a Script to Collect History Data and Send it to a Remote Server via rsync
  <a name="code-rsync"></a>
 This method collects terminal history using shell scripts and transfers logs using rsync.
+
+<img src="https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/sync.png" width="700" />
 
 **Steps:**
 
