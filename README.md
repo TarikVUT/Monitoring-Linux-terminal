@@ -36,6 +36,9 @@ This project provides a comprehensive solution for monitoring and logging termin
 ## 1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
 <a name="rsyslog-rsyslog"></a>
 This method uses rsyslog to capture and forward terminal input.
+<img src="https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/rsyslog.png" width="700" />
+
+
 **Steps:**
 ### 1. Configure rsyslog on the client to capture user input from the terminal.
    To install the rsyslog package in Fedora, use the following command:
