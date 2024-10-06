@@ -276,16 +276,16 @@ https://github.com/user-attachments/assets/e36200e5-8f9c-4cd1-8d8c-f2c5376947f1
 
 The following functionalities are already implemented:
 
- - [ ] Configuring rsyslog to collect user input and send it to a remote server:
-   - [ ] Client-side rsyslog configuration for capturing input.
-   - [ ] Server-side rsyslog configuration for receiving and sorting logs.
-   - [ ] Firewall setup for secure communication.
- - [ ] Collecting user input via auditd and sending logs to a remote server:
-   - [ ] Configuring auditd on the client for input collection.
-   - [ ] Configuring auditd on the server to receive logs.
- - [ ] Using a script to collect history data and send it via rsync:
-   - [ ] Script creation for collecting terminal history.
-   - [ ] Configuring the server to receive logs via rsync.
+ - [x] Configuring rsyslog to collect user input and send it to a remote server:
+   - [x] Client-side rsyslog configuration for capturing input.
+   - [x] Server-side rsyslog configuration for receiving and sorting logs.
+   - [x] Firewall setup for secure communication.
+ - [x] Collecting user input via auditd and sending logs to a remote server:
+   - [x] Configuring auditd on the client for input collection.
+   - [x] Configuring auditd on the server to receive logs.
+ - [x] Using a script to collect history data and send it via rsync:
+   - [x] Script creation for collecting terminal history.
+   - [x] Configuring the server to receive logs via rsync.
 
 
 
