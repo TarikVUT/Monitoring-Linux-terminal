@@ -24,7 +24,7 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 --------------------------------------------
 
-# Methods of Collection
+## Methods of Collection
 
 1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](#rsyslog-rsyslog)
 2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](#audit-rsyslog)
