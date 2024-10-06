@@ -152,10 +152,34 @@ The config will save all received logs to "/var/log/histroy.log" on the server s
 <a name="audit-rsyslog"></a>
 With auditd, the system's audit framework tracks user actions, and rsyslog sends these logs to the server.
 
+
 **Steps:**
 
 1. Configure auditd on the client to collect terminal input.
-2. Set up rsyslog on the server to receive logs from the client.
+You can create audit rules for tracking execve, which is the system call made whenever a command is executed.
+- Edit the audit rules file: Open /etc/audit/rules.d/audit.rules with your preferred editor:
+
+```bash
+# vi /etc/audit/rules.d/audit.rules
+```
+
+- Add the following rules to capture execve calls for all users:
+
+```bash
+# Capture execve calls (commands executed in terminal)
+-a always,exit -F arch=b64 -S execve -k user_commands
+-a always,exit -F arch=b32 -S execve -k user_commands
+```
+> [!NOTE]  
+> If you want to track only specific users or groups, you can add -F uid=<user_id> or -F gid=<group_id> to the rule.
+
+- Restart the auditd service to apply the new rules:
+
+```bash
+# service auditd restart
+```
+
+3. Set up rsyslog on the server to receive logs from the client.
 
    
 ## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
