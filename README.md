@@ -131,6 +131,7 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
     ``` 
 #### Send via RELP
 #### Send over TLS
+
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
 <a name="receive_rsyslog_udp/tcp"></a>
 
@@ -169,7 +170,7 @@ With auditd, the system's audit framework tracks user actions, and rsyslog sends
 
 **Steps:**
 
-1. Configure auditd on the client to collect terminal input.
+### 1. Configure auditd on the client to collect terminal input.
 You can create audit rules for tracking execve, which is the system call made whenever a command is executed.
 
 1- Edit the audit rules file: Open /etc/audit/rules.d/audit.rules with your preferred editor:
@@ -197,15 +198,15 @@ You can create audit rules for tracking execve, which is the system call made wh
 refer to [Send via UDP](#send-udp), with changing "$InputFileName /var/log/history.log" to "$InputFileName /var/log/audit/audit.log".
 
 
-3. Set up rsyslog on the server to receive logs from the client.
+### 2. Set up rsyslog on the server to receive logs from the client.
    Refer to [Set up rsyslog on the server to receive and categorize logs from the client](#receive_rsyslog_udp/tcp)
 
-#### The demonstration video
+### The demonstration video
 
 
 https://github.com/user-attachments/assets/37a52888-7c08-45dc-b505-984b5562d9f3
 
-
+-----------------------------------
    
 ## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
  <a name="audit-auditg"></a>
@@ -213,8 +214,8 @@ This approach uses auditd to collect input and directly sends logs to the remote
 
 **Steps:**
 
-1. Configure auditd on the client to track user input.
-2. Configure auditd on the server to receive logs from the client.
+### 1. Configure auditd on the client to track user input.
+### 2. Configure auditd on the server to receive logs from the client.
 
 ## 4. Using a Script to Collect History Data and Send it to a Remote Server via rsync
  <a name="code-rsync"></a>
@@ -224,7 +225,7 @@ This method collects terminal history using shell scripts and transfers logs usi
 
 **Steps:**
 
-1. Create a script to capture the terminal history and save it to a file.
+### 1. Create a script to capture the terminal history and save it to a file.
    1- Use PROMPT_COMMAND with history
    
    You can modify the PROMPT_COMMAND variable in your shell configuration file (~/.bashrc or ~/.bash_profile) to log every command executed by the user into a specific file.
@@ -249,7 +250,7 @@ This method collects terminal history using shell scripts and transfers logs usi
    <img src="https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/output_of_bashrc_script.png" width="700" />
 
    
-3. Set up the server to receive the history logs via rsync.
+### 2. Set up the server to receive the history logs via rsync.
    1- Set Up SSH Authentication (if necessary)
    If you're copying files over SSH, it's better to use SSH keys for authentication rather than typing your password repeatedly.
        1. Generate an SSH key (on the client side):
