@@ -26,10 +26,10 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 # Methods of Collection
 
-1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](rsyslog-rsyslog)
-2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](audit-rsyslog)
-3. [**Collecting User Input Using auditd and Sending Logs Directly via Audit**](audit-audit)
-4. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](code-rsync)
+1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](#rsyslog-rsyslog)
+2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](#audit-rsyslog)
+3. [**Collecting User Input Using auditd and Sending Logs Directly via Audit**](#audit-audit)
+4. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](#code-rsync)
 
 --------------------------------------------
 
