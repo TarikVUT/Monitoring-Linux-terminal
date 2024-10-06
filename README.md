@@ -229,6 +229,9 @@ This method collects terminal history using shell scripts and transfers logs usi
    ```bash
    source ~/.bashrc
    ```
+   > [!NOTE]  
+   > To collect the history for the root user, apply the above steps in "/etc/bashrc".
+
    #### The demonstration image
    
  
@@ -249,11 +252,24 @@ This method collects terminal history using shell scripts and transfers logs usi
   2- Continuously Sync with a Loop
   To make this process continuous, you can use a loop in the terminal. Here's an example using a bash loop:
    ```bash
+       #!/bin/bash
        while true; do
        rsync -avz /path/to/local/file user@server_address:/path/to/remote/destination
        sleep 5  # Wait for 5 seconds 
        done
-   ```  
+   ```
+
+> [!NOTE]  
+> To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
+
+
+#### The demonstration video
+
+
+https://github.com/user-attachments/assets/e36200e5-8f9c-4cd1-8d8c-f2c5376947f1
+
+
+
 # Current state of the solution
 
 The following functionalities are already implemented:
