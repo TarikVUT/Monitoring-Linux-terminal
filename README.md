@@ -1,5 +1,5 @@
 > [!WARNING]
-> This script is tailored for Fedora 38. It operates under root permissions. If you lack extensive Linux expertise, refrain from altering its contents. Take the time to thoroughly understand the script's functionality before deciding whether to execute it.
+> This script is tailored for Fedora 40. It operates under root permissions. If you lack extensive Linux expertise, refrain from altering its contents. Take the time to thoroughly understand the script's functionality before deciding whether to execute it.
 
 
 # Monitoring-Linux-terminal
