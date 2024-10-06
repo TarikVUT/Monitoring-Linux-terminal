@@ -95,7 +95,9 @@ This method uses rsyslog to capture and forward terminal input.
       ```
    Rsyslog will send the logs from log file "/var/log/history.log" to test_server_IP (server) via UPD, port 514. The sent logs have Facility "local3".
 
-   To send via udp use @, for TCP @@.
+   > [!NOTE]  
+   >To send via UDP use @, for TCP @@.
+
    - Restart the rsyslog service.
      
       ```bash
