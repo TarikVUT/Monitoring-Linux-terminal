@@ -70,12 +70,13 @@ This method uses rsyslog to capture and forward terminal input.
    When it comes to rotating logs to another server, you can configure rsyslog to forward logs to a remote server. To do this, you need to edit the /etc/rsyslog.conf configuration file or create a new configuration file in the /etc/rsyslog.d/ directory.
    There are several ways to send protocols from client to server.
 
-   - Rotation via UDP
-   - Rotation via TCP
-   - Rotation via RELP
-   - Rotation over TLS
+   - Send via UDP
+   - Send via TCP
+   - Send via RELP
+   - Send over TLS
 
-   #### Rotation via UDP
+   #### Send via UDP
+   <a name="send-udp"></a>
   - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
       
       ```bash
@@ -105,7 +106,7 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
 
 -------------------------
 
-#### Rotation via TCP
+#### Send via TCP
 - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
   
   ```bash
@@ -124,9 +125,10 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
     ```bash
         # service rsyslog restart
     ``` 
-#### Rotation via RELP
-#### Rotation over TLS
+#### Send via RELP
+#### Send over TLS
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
+<a name="receive_rsyslog_udp/tcp"></a>
 1- Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
 
 ```bash
@@ -162,13 +164,13 @@ With auditd, the system's audit framework tracks user actions, and rsyslog sends
 
 1. Configure auditd on the client to collect terminal input.
 You can create audit rules for tracking execve, which is the system call made whenever a command is executed.
-- Edit the audit rules file: Open /etc/audit/rules.d/audit.rules with your preferred editor:
+1- Edit the audit rules file: Open /etc/audit/rules.d/audit.rules with your preferred editor:
 
 ```bash
 # vi /etc/audit/rules.d/audit.rules
 ```
 
-- Add the following rules to capture execve calls for all users:
+2- Add the following rules to capture execve calls for all users:
 
 ```bash
 # Capture execve calls (commands executed in terminal)
@@ -178,13 +180,17 @@ You can create audit rules for tracking execve, which is the system call made wh
 > [!NOTE]  
 > If you want to track only specific users or groups, you can add -F uid=<user_id> or -F gid=<group_id> to the rule.
 
-- Restart the auditd service to apply the new rules:
+3- Restart the auditd service to apply the new rules:
 
 ```bash
 # service auditd restart
 ```
+4- Set rsyslog to send the audit log to remote rsyslog remote server.
+refer to [Send via UDP](#send-udp), with changing "$InputFileName /var/log/history.log" to "$InputFileName /var/log/audit/audit.log".
+
 
 3. Set up rsyslog on the server to receive logs from the client.
+   Refer to [Set up rsyslog on the server to receive and categorize logs from the client](#receive_rsyslog_udp/tcp)
 
    
 ## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
