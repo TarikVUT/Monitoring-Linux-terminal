@@ -214,7 +214,22 @@ This method collects terminal history using shell scripts and transfers logs usi
 **Steps:**
 
 1. Create a script to capture the terminal history and save it to a file.
-2. Set up the server to receive the history logs via rsync.
+   1- Use PROMPT_COMMAND with history
+   
+   You can modify the PROMPT_COMMAND variable in your shell configuration file (~/.bashrc or ~/.bash_profile) to log every command executed by the user into a specific file.
+
+   2- Add the following code at the end of the file (~/.bashrc or ~/.bash_profile):
+
+   ```bash
+   export LOGFILE="/home/user/user_history.txt"
+   export PROMPT_COMMAND='RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'
+   ```
+   3- To apply the changes immediately:
+   
+   ```bash
+   source ~/.bashrc
+   ```
+3. Set up the server to receive the history logs via rsync.
 
 # Current state of the solution
 
