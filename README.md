@@ -128,6 +128,7 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
 #### Send over TLS
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
 <a name="receive_rsyslog_udp/tcp"></a>
+
 1- Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
 
 ```bash
@@ -163,6 +164,7 @@ With auditd, the system's audit framework tracks user actions, and rsyslog sends
 
 1. Configure auditd on the client to collect terminal input.
 You can create audit rules for tracking execve, which is the system call made whenever a command is executed.
+
 1- Edit the audit rules file: Open /etc/audit/rules.d/audit.rules with your preferred editor:
 
 ```bash
