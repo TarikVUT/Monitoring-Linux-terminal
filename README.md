@@ -98,7 +98,7 @@ This method uses rsyslog to capture and forward terminal input.
       ```bash
       # service rsyslog restart
       ```
-     // ![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/1-udp%20logs%20rsyslog.png)
+     [//]: # ( ![](https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/1-udp%20logs%20rsyslog.png))
      
 #### The demonstration video
 
