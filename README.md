@@ -213,7 +213,7 @@ https://github.com/user-attachments/assets/37a52888-7c08-45dc-b505-984b5562d9f3
 This approach uses auditd to collect input and directly sends logs to the remote server.
 
 **Steps:**
-
+**TODO**
 ### 1. Configure auditd on the client to track user input.
 ### 2. Configure auditd on the server to receive logs from the client.
 
