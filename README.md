@@ -78,11 +78,16 @@ This method uses rsyslog to capture and forward terminal input.
    - Send via RELP
    - Send over TLS
 
-   #### Send via UDP
+--------------------------------------------------
+
+   ### Send via UDP
+
+   - ** Client side **
+   
    <a name="send-udp"></a>
-  - Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+  1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
       
-      ```bash
+   ```bash
       $ModLoad imfile
       $InputFilePollInterval 3
       $InputFileName /var/log/history.log
@@ -92,26 +97,52 @@ This method uses rsyslog to capture and forward terminal input.
       $InputFileFacility local3
       $InputRunFileMonitor
       local3.* @test_server_IP:514
-      ```
+   ```
    Rsyslog will send the logs from log file "/var/log/history.log" to test_server_IP (server) via UPD, port 514. The sent logs have Facility "local3".
 
    > [!NOTE]  
    > To send via UDP use @, for TCP @@.
 
-   - Restart the rsyslog service.
+   2. Restart the rsyslog service.
      
-      ```bash
+   ```bash
       # service rsyslog restart
-      ```
-     
+   ```
+      Set up rsyslog on the server to receive and categorize logs from the client.
+<a name="receive_rsyslog_udp/tcp"></a>
+
+- **Server side**
+
+1. Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
+
+```bash
+$ModLoad imudp
+$UDPServerRun 514
+
+```
+2.  Configure the rsyslog server to receive events/logs from the client:
+
+Add the following line "/etc/rsyslog.d/history_client.conf"
+
+```bash
+if ($syslogfacility-text == 'local3') then {
+/var/log/histroy.log
+stop
+}
+```
+The config will save all received logs to "/var/log/histroy.log" on the server side
+   
 #### The demonstration video
 
 https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
 
 -------------------------
 
-#### Send via TCP
-- Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+### Send via TCP
+
+- **Client side**
+  
+1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
   
   ```bash
       $ModLoad imfile
@@ -124,12 +155,42 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
       $InputRunFileMonitor
       local3.* @@test_server_IP:514
   ```
-- Restart the rsyslog service.
+2. Restart the rsyslog service.
 
     ```bash
         # service rsyslog restart
-    ``` 
+    ```
+- **Server side**
+
+1. Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
+
+```bash
+$ModLoad imtcp
+$InputTCPServerRun 514
+
+```
+2.  Configure the rsyslog server to receive events/logs from the client:
+
+Add the following line "/etc/rsyslog.d/history_client.conf"
+
+```bash
+if ($syslogfacility-text == 'local3') then {
+/var/log/histroy.log
+stop
+}
+```
+The config will save all received logs to "/var/log/histroy.log" on the server side
+   
+#### The demonstration video
+
+TODO
+
 #### Send via RELP
+
+TODO
+
+----------------------------------------
+
 #### Send over TLS
 
 The below packages are required on client and server side:
@@ -282,36 +343,7 @@ Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You 
  ```bash
     # systemctl restart rsyslog
  ```
-
-
-
-### 2. Set up rsyslog on the server to receive and categorize logs from the client.
-<a name="receive_rsyslog_udp/tcp"></a>
-
-1- Uncomment the following lines in the 'MODULES' section of /etc/rsyslog.conf:
-
-```bash
-$ModLoad imtcp
-$InputTCPServerRun 514
-
-Note: If using UDP then uncomment the following lines 
-
-$ModLoad imudp
-$UDPServerRun 514
-
-```
-2-  Configure the rsyslog server to receive events/logs from the client:
-
-Add the following line "/etc/rsyslog.d/history_client.conf"
-
-```bash
-if ($syslogfacility-text == 'local3') then {
-/var/log/histroy.log
-stop
-}
-```
-The config will save all received logs to "/var/log/histroy.log" on the server side
-   
+---------------------------
 ---------------------------
 
 ## 2. Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog
