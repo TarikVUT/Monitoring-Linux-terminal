@@ -215,8 +215,8 @@ The below packages are required on client and server side:
     $InputTCPServerRun 6514
     ```
 
-   > [!NOTE]  
-   > Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
+> [!NOTE]  
+> Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
     
     6. Restart rsyslog:
 
