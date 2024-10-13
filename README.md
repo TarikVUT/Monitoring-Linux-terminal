@@ -160,7 +160,7 @@ The below packages are required on client and server side:
     Common Name (eg, your name or your server's hostname) []: rsyslog-server.com
     ```
     hello
-   > [!NOTE]  
+   > [!NOTE]   
    > The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
 
   
@@ -199,8 +199,8 @@ The below packages are required on client and server side:
     $InputTCPServerRun 6514
     ```
 
-    > [!NOTE]  
-    > Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
+   > [!NOTE]  
+   > Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
     
     6. Restart rsyslog:
     ```bash
