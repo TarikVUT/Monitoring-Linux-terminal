@@ -158,7 +158,7 @@ The below packages are required on client and server side:
     ```
        
 - Server configuration
-    1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
+  1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
 
   ```bash
     # openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out server-req.pem
@@ -172,19 +172,19 @@ The below packages are required on client and server side:
    The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
 
   
-   2. Check that the key is formatted correctly:
+ 2. Check that the key is formatted correctly:
 
     ```bash
     # openssl rsa -in server-key.pem -out server-key.pem
     ```
     
-  3. Use the key and CA certificate to sign the request you just created:
+ 3. Use the key and CA certificate to sign the request you just created:
 
     ```bash
     # openssl x509 -req -in server-req.pem -days 3600 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
     ```
     
-  4. Move the certificates and keys to the correct directories:
+ 4. Move the certificates and keys to the correct directories:
 
     ```bash
     # mv server-cert.pem ca-cert.pem /etc/pki/tls/certs/
@@ -198,7 +198,7 @@ The below packages are required on client and server side:
     # restorecon -RvF /etc/pki/tls/private/{ca-key.pem,server-key.pem}
     ```  
     
-  5. Create a nested configuration file for TLS-related directives. In the example below, this is the file "/etc/rsyslog.d/tls.conf". Make sure it looks like this:
+ 5. Create a nested configuration file for TLS-related directives. In the example below, this is the file "/etc/rsyslog.d/tls.conf". Make sure it looks like this:
 
     ```bash
     [root@rsyslog-server ~]# cat /etc/rsyslog.d/tls.conf 
@@ -213,14 +213,13 @@ The below packages are required on client and server side:
     $InputTCPServerRun 6514
     ```
 
-> [!NOTE]  
-> Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
+Replace $InputTCPServerStreamDriverPermittedPeer with the client host name. You can also use the '*' character to match multiple names, e.g:
     
-  6. Restart rsyslog:
+6. Restart rsyslog:
 
-  ```bash
+ ```bash
     # systemctl restart rsyslog
-    ```
+ ```
 
     
 ### 2. Set up rsyslog on the server to receive and categorize logs from the client.
