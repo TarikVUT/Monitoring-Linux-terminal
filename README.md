@@ -139,19 +139,19 @@ The below packages are required on client and server side:
 ```
 
 - CA configuration
-   1. Create the CA key:
+1. Create the CA key:
        
    ```bash
     # openssl genrsa 2048 > ca-key.pem
     ```
     
-    2. Create the CA certificate from this key:
+2. Create the CA certificate from this key:
 
    ```bash
     # openssl req -new -x509 -nodes -days 3600 -key ca-key.pem -out ca-cert.pem
     ```
        
-    3. Make sure both files (ca-cert.pem and ca-key.pem) are copied to each client and server.
+3. Make sure both files (ca-cert.pem and ca-key.pem) are copied to each client and server.
 
    ```bash
     # scp ca-cert.pem ca-key.pem <user>@<system>:~
