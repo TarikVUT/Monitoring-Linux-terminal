@@ -139,15 +139,15 @@ The below packages are required on client and server side:
 ```
 
 - CA configuration
-    1. Create the CA key:
+   1. Create the CA key:
        
-    ```bash
+   ```bash
     # openssl genrsa 2048 > ca-key.pem
     ```
     
     2. Create the CA certificate from this key:
 
-    ```bash
+   ```bash
     # openssl req -new -x509 -nodes -days 3600 -key ca-key.pem -out ca-cert.pem
     ```
        
@@ -158,7 +158,7 @@ The below packages are required on client and server side:
     ```
        
 - Server configuration
-   1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
+    1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
 
   ```bash
     # openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out server-req.pem
@@ -170,8 +170,7 @@ The below packages are required on client and server side:
     Common Name (eg, your name or your server's hostname) []: rsyslog-server.com
     ```
 
-> [!NOTE]   
-> The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
+
 
   
    2. Check that the key is formatted correctly:
