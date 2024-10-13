@@ -159,9 +159,9 @@ The below packages are required on client and server side:
     ```bash
     Common Name (eg, your name or your server's hostname) []: rsyslog-server.com
     ```
-    
-  > [!NOTE]  
-  > The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
+    hello
+   > [!NOTE]  
+   > The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
 
   
     2. Check that the key is formatted correctly:
