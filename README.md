@@ -73,16 +73,16 @@ This method uses rsyslog to capture and forward terminal input.
    When it comes to rotating logs to another server, you can configure rsyslog to forward logs to a remote server. To do this, you need to edit the /etc/rsyslog.conf configuration file or create a new configuration file in the /etc/rsyslog.d/ directory.
    There are several ways to send protocols from client to server.
 
-   - Send via UDP
-   - Send via TCP
-   - Send via RELP
-   - Send over TLS
+   - [Send via UDP](#udp)
+   - [Send via TCP](#tcp)
+   - [Send over TLS](#tls)
 
 --------------------------------------------------
 
    ### Send via UDP
+   <a name="udp"></a>
 
-   - ** Client side **
+   - **Client side**
    
    <a name="send-udp"></a>
   1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
@@ -139,7 +139,7 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
 -------------------------
 
 ### Send via TCP
-
+<a name="tcp"></a>
 - **Client side**
   
 1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
@@ -185,14 +185,10 @@ The config will save all received logs to "/var/log/histroy.log" on the server s
 
 TODO
 
-#### Send via RELP
-
-TODO
-
 ----------------------------------------
 
-#### Send over TLS
-
+### Send over TLS
+<a name="tls"></a>
 The below packages are required on client and server side:
 
 ```bash
