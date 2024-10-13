@@ -158,7 +158,7 @@ The below packages are required on client and server side:
     ```
        
 - Server configuration
-    1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
+   1. In the directory where the ca-key.pem and ca-cert.pem files are generate a signing request:
 
   ```bash
     # openssl req -newkey rsa:2048 -days 3600 -nodes -keyout server-key.pem -out server-req.pem
@@ -170,39 +170,39 @@ The below packages are required on client and server side:
     Common Name (eg, your name or your server's hostname) []: rsyslog-server.com
     ```
 
-   > [!NOTE]   
-   > The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
+> [!NOTE]   
+> The "Common Name" field will later be compared to the rsyslog configuration (specifically the $InputTCPServerStreamDriverPermittedPeer configuration field). If this field is incorrectly populated, two-way TLS authentication will fail.
 
   
-    2. Check that the key is formatted correctly:
+   2. Check that the key is formatted correctly:
 
-  ```bash
+    ```bash
     # openssl rsa -in server-key.pem -out server-key.pem
     ```
     
-    3. Use the key and CA certificate to sign the request you just created:
+  3. Use the key and CA certificate to sign the request you just created:
 
-   ```bash
+    ```bash
     # openssl x509 -req -in server-req.pem -days 3600 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
     ```
     
-    4. Move the certificates and keys to the correct directories:
+  4. Move the certificates and keys to the correct directories:
 
-  ```bash
+    ```bash
     # mv server-cert.pem ca-cert.pem /etc/pki/tls/certs/
     # mv server-key.pem ca-key.pem /etc/pki/tls/private/
     ```
   
     If you are using SELinux restore these files' context:
 
-  ```bash
+    ```bash
     # restorecon -RvF /etc/pki/tls/certs/{ca-cert.pem,server-cert.pem}
     # restorecon -RvF /etc/pki/tls/private/{ca-key.pem,server-key.pem}
     ```  
     
-    5. Create a nested configuration file for TLS-related directives. In the example below, this is the file "/etc/rsyslog.d/tls.conf". Make sure it looks like this:
+  5. Create a nested configuration file for TLS-related directives. In the example below, this is the file "/etc/rsyslog.d/tls.conf". Make sure it looks like this:
 
-  ```bash
+    ```bash
     [root@rsyslog-server ~]# cat /etc/rsyslog.d/tls.conf 
     $DefaultNetstreamDriver gtls
     $DefaultNetstreamDriverCAFile /etc/pki/tls/certs/ca-cert.pem
