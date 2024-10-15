@@ -456,6 +456,145 @@ This method collects terminal history using shell scripts and transfers logs usi
 > To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
 
 
+```bahs
+#!/bin/bash
+# This script is used to sync configuration files between two servers
+
+# Save the user in var user, and detect the real user in case the script runs using sudo
+if [ "$SUDO_USER" ]; then
+    user=$SUDO_USER
+else
+    user=$(whoami)
+fi
+
+echo "The real user is: $user"
+
+
+# Check if sshd service is installed, if not, install it
+if ! command -v sshd &> /dev/null; then
+    echo "sshd is not installed. Installing..."
+    if [ -f /etc/debian_version ]; then
+        sudo apt-get update
+        sudo apt-get install -y openssh-server
+    elif [ -f /etc/redhat-release ]; then
+        sudo yum install -y openssh-server
+    else
+        echo "Unsupported OS. Please install sshd manually."
+        exit 1
+    fi
+else
+    echo "sshd is already installed."
+fi
+
+# Enable and start the sshd service
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
+
+
+# List network interfaces with their IPv4 addresses
+interfaces=$(ip -4 -o addr show | awk '{print $2, $4}' | cut -d/ -f1)
+
+echo "Available network interfaces:"
+echo "$interfaces"
+
+# Ask the user to choose an interface
+read -p "Enter the interface you want to use: " chosen_interface
+
+echo "You chose interface: $chosen_interface"
+
+# Extract the IPv4 address of the chosen interface
+IPv4=$(echo "$interfaces" | grep "^$chosen_interface " | awk '{print $2}')
+
+echo "IPv4 address: $IPv4"
+
+if [ -z "$IPv4" ]; then
+    echo "Invalid interface selected."
+    exit 1
+fi
+
+echo "Selected interface: $chosen_interface with IP: $IPv4"
+
+
+
+# Ask the user to enter the server IP
+read -p "Enter the server IP: " server_ip
+
+# Generate the SSH key if it doesn't exist
+key_path="$HOME/.ssh/key_for_logs"
+if [ ! -f "$key_path" ]; then
+    ssh-keygen -t rsa -b 2048 -f "$key_path" -N ""
+    echo "SSH key generated at $key_path"
+else
+    echo "SSH key already exists at $key_path"
+fi
+
+# Push the public key to the server
+ssh-copy-id -i "${key_path}.pub" "$user@$server_ip"
+if [ $? -eq 0 ]; then
+    echo "SSH key successfully copied to $server_ip"
+else
+    echo "Failed to copy SSH key to $server_ip"
+    exit 1
+fi
+
+#
+# Add the following lines to the ~/.bashrc file to log the user history
+CONFIG1='export LOGFILE="/home/user/user_history.log"'
+CONFIG2='export PROMPT_COMMAND='\''RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'\'''
+
+if ! grep -qF "$CONFIG1" ~/.bashrc; then
+    echo "$CONFIG1" >> ~/.bashrc
+fi
+
+if ! grep -qF "$CONFIG2" ~/.bashrc; then
+    echo "$CONFIG2" >> ~/.bashrc
+fi
+
+# Reload the bashrc file
+source ~/.bashrc
+
+# Create the logs_sender_service script
+cat << 'EOF' | sudo tee /usr/local/bin/logs_sender_service.sh > /dev/null
+#!/bin/bash
+while true; do
+    rsync -avz /home/user/user_history.log $user@$server_ip:/home/logs/$IPv4.log
+    sleep 5  # Wait for 5 seconds 
+done
+EOF
+
+# Make the script executable
+sudo chmod +x /usr/local/bin/logs_sender_service.sh
+
+# Create the systemd service file
+cat << EOF | sudo tee /etc/systemd/system/logs_sender_service.service > /dev/null
+[Unit]
+Description=Logs Sender Service
+
+[Service]
+ExecStart=/usr/local/bin/logs_sender_service.sh
+Restart=always
+User=$user
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd, enable and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable logs_sender_service
+sudo systemctl start logs_sender_service
+
+# Check if the logs_sender_service is running
+if systemctl is-active --quiet logs_sender_service; then
+    echo "logs_sender_service is running."
+else
+    echo "logs_sender_service is not running."
+fi
+
+```
+
+
 #### The demonstration video
 
 
