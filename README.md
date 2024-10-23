@@ -496,7 +496,9 @@ preexec_functions+=("preexec")
 
 
 ```
-```bahs
+
+
+```bash
 #!/bin/bash
 # This script is used to sync configuration files between two servers
 
