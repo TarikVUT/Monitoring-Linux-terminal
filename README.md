@@ -455,7 +455,38 @@ This method collects terminal history using shell scripts and transfers logs usi
 > [!NOTE]  
 > To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
 
+Kali code
 
+```bash
+export LOGFILE="/home/kali/user_history.log"
+
+# Function to capture the exit status of the last command
+log_command_status() {
+    # Store the exit status in a global variable
+    LAST_EXIT_STATUS=$?
+}
+
+# Precommand hook to log the last command and its status
+precmd() {
+    local cmd
+    cmd=$(fc -ln -1)  # Get the last command
+
+    # Determine success or failure
+    if [[ $LAST_EXIT_STATUS -eq 0 ]]; then
+        status_message="SUCCESS"
+    else
+        status_message="FAILURE"
+    fi
+
+    # Log the command with its status
+    echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $cmd - $status_message" >> "$LOGFILE"
+}
+
+# Bind the log_command_status function to each command
+preexec_functions+=("log_command_status")
+
+
+```
 ```bahs
 #!/bin/bash
 # This script is used to sync configuration files between two servers
