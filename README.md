@@ -458,32 +458,41 @@ This method collects terminal history using shell scripts and transfers logs usi
 Kali code
 
 ```bash
-export LOGFILE="/home/kali/user_history.log"
+export LOGFILE="/home/kali/user_history.txt"
 
-# Function to capture the exit status of the last command
-log_command_status() {
-    # Store the exit status in a global variable
-    LAST_EXIT_STATUS=$?
+# Variable to store the last exit status
+LAST_EXIT_STATUS=0
+
+# Pre-execution hook to store the command to be executed
+preexec() {
+    LAST_CMD=$1  # Store the command to be executed
 }
 
 # Precommand hook to log the last command and its status
 precmd() {
-    local cmd
-    cmd=$(fc -ln -1)  # Get the last command
 
-    # Determine success or failure
-    if [[ $LAST_EXIT_STATUS -eq 0 ]]; then
-        status_message="SUCCESS"
-    else
-        status_message="FAILURE"
+    LAST_EXIT_STATUS=$?
+    # Check if LAST_CMD is set
+    if [[ -n $LAST_CMD ]]; then
+        local cmd=$LAST_CMD
+        # Log the command with its exit status after execution
+        if [[ $LAST_EXIT_STATUS -eq 0 ]]; then
+            status_message="SUCCESS"
+        else
+            status_message="FAILURE"
+        fi
+
+        # Log the command with its status
+        echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $cmd - $status_message" >> "$LOGFILE"
     fi
 
-    # Log the command with its status
-    echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $cmd - $status_message" >> "$LOGFILE"
+    # Reset LAST_CMD for the next command
+    unset LAST_CMD
+    
 }
 
-# Bind the log_command_status function to each command
-preexec_functions+=("log_command_status")
+# Bind the precmd and preexec functions
+preexec_functions+=("preexec")
 
 
 ```
