@@ -33,6 +33,8 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 --------------------------------------------
 
+
+
 ## 1. Configuring rsyslog to Collect User Input and Send it to a Remote Server
 <a name="rsyslog-rsyslog"></a>
 This method uses rsyslog to capture and forward terminal input.
@@ -454,6 +456,14 @@ This method collects terminal history using shell scripts and transfers logs usi
 
 > [!NOTE]  
 > To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
+
+## A method that will meet our requirements.
+
+Since the final method doesn't require any additional packages and doesn't affect OS performance, it was selected. In the following section, we will explore this method in detail and develop a script to simplify configuration application.
+
+
+> [!NOTE]  
+> Please note the script is for Fedora 40 and Kali.
 
 Kali code
 
