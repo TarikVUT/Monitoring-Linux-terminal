@@ -809,7 +809,7 @@ echo "================================="
 	# /home/$user/user_terminal.log is a file where the logs will be saved localy.
 	# feelfree to change it, but may you will face a issue with selinux.
 	##
-	CONFIG1="export LOGFILE=\"/home/$user/user_terminal.log\""
+	CONFIG1="export LOGFILE=\"/home/$user/user_history.log\""
 	CONFIG2='export PROMPT_COMMAND='\''RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'\'''
 
 	if ! grep -qF "$CONFIG1" ~/.bashrc; then
