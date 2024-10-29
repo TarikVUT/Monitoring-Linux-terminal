@@ -77,6 +77,7 @@ echo "================================="
             sudo apt install -y openssh-server
             sudo systemctl enable ssh
             sudo systemctl start ssh
+	    mkdir -p /home/kali/.ssh
 	echo
             echo "SSH has been installed and enabled on Ubuntu."
 	echo
@@ -88,6 +89,7 @@ echo "================================="
             sudo dnf install -y openssh-server
             sudo systemctl enable sshd
             sudo systemctl start sshd
+	    mkdir -p /home/kali/.ssh
 	echo
             echo "SSH has been installed and enabled on Fedora 40."
 	echo
@@ -101,6 +103,7 @@ echo "================================="
             sudo apt install -y openssh-server
             sudo systemctl enable ssh
             sudo systemctl start ssh
+	    mkdir -p /home/kali/.ssh
 	echo
             echo "SSH has been installed and enabled on Kali Linux."
 	echo
