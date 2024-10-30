@@ -424,8 +424,9 @@ This method collects terminal history using shell scripts and transfers logs usi
    ```bash
    source ~/.bashrc
    ```
-   > [!NOTE]  
-   > To collect the history for the root user, apply the above steps in "/etc/bashrc".
+
+> [!NOTE]  
+> To collect the history for the root user, apply the above steps in "/etc/bashrc".
 
    #### The demonstration image
    
