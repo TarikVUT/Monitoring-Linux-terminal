@@ -510,8 +510,8 @@ Since the final method doesn't require any additional packages and doesn't affec
       # Bind the precmd and preexec functions
       preexec_functions+=("preexec")
       ```
-      > [!NOTE]  
-      > You should change the user.
+> [!NOTE]  
+> You should change the user.
       
 2. Reload Shell Configurations
    - Reload the shell configurations by running:
@@ -534,8 +534,8 @@ Since the final method doesn't require any additional packages and doesn't affec
     ssh-copy-id -i path_to_key.pub sshuser@$server_ip
     ```
     
-    > [!NOTE]  
-    > Be sure that the keys owner is the user NOT root.
+> [!NOTE]  
+> Be sure that the keys owner is the user NOT root.
 
 5. Sync Local Logs to Remote Server
     - Use rsync to sync local logs with the remote server. Create the "log_sender.sh".
