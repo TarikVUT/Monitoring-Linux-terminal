@@ -520,50 +520,63 @@ Since the final method doesn't require any additional packages and doesn't affec
      source ~/.zshrc && source /root/.zshrc     # For Zsh
      ```
 
+3. Verify Local Log Collection
+    - Ensure that the user history (local logs) is being collected on the local machine "/home/user/user_history.log".
 
+4. Establish Passwordless SSH Connection
+    - Set up a passwordless SSH connection between the client and the server.
+    ```bash
+    # Generate a new SSH key without a passphrase
+    ssh-keygen -t rsa -b 2048 -f path_to_key -N ""
 
-Kali code
-
-```bash
-export LOGFILE="/home/kali/user_history.txt"
-
-# Variable to store the last exit status
-LAST_EXIT_STATUS=0
-
-# Pre-execution hook to store the command to be executed
-preexec() {
-    LAST_CMD=$1  # Store the command to be executed
-}
-
-# Precommand hook to log the last command and its status
-precmd() {
-
-    LAST_EXIT_STATUS=$?
-    # Check if LAST_CMD is set
-    if [[ -n $LAST_CMD ]]; then
-        local cmd=$LAST_CMD
-        # Log the command with its exit status after execution
-        if [[ $LAST_EXIT_STATUS -eq 0 ]]; then
-            status_message="SUCCESS"
-        else
-            status_message="FAILURE"
-        fi
-
-        # Log the command with its status
-        echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $cmd - $status_message" >> "$LOGFILE"
-    fi
-
-    # Reset LAST_CMD for the next command
-    unset LAST_CMD
+    # Push the public key to the server
+    ssh-copy-id -i path_to_key.pub sshuser@$server_ip
+    ```
     
-}
+    > [!NOTE]  
+    > Be sure that the keys owner is the user NOT root.
 
-# Bind the precmd and preexec functions
-preexec_functions+=("preexec")
+5. Sync Local Logs to Remote Server
+    - Use rsync to sync local logs with the remote server. Create the "log_sender.sh".
+     ```bash
+     #!/bin/bash
+     while true; do
+     rsync -avz -e \"ssh -i path_to_key\" /home/user/user_history.log sshuser@server_ip:/home/sshuser/client.log 
+     sleep 5  # Wait for 5 seconds 
+     done
+     ```
+   - Make the script exec
+     ```bash
+     #  chmod +x log_sender.sh
+     ```
 
+6. Create a Sync Service
+  - Create the log_sync.service in "/etc/systemd/system/"
 
-```
+    ```bash
+    [Unit]
+    Description=Sync User History Log Service
+    After=network.target
 
+    [Service]
+    ExecStart=log_sender.sh
+    Restart=always
+    User=$user
+
+    [Install]
+    WantedBy=multi-user.target
+    
+    ```
+  - Enable the service to start on boot
+    ```bash
+    systemctl enable sync_user_history.service	
+    ```
+  - Reload the systemd daemon.
+    ```bash
+    systemctl daemon-reload
+    systemctl restart sync_user_history.service
+    ```
+    
 
 #### The demonstration video
 
@@ -588,8 +601,6 @@ The following functionalities are already implemented:
    - [x] Configuring the server to receive logs via rsync.
 
 
-
-# The demonstration video
 
 # How to Contribute
 Feel free to submit pull requests or raise issues if you encounter any problems or have suggestions for improvement.
