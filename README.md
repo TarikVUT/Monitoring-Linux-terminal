@@ -463,7 +463,64 @@ Since the final method doesn't require any additional packages and doesn't affec
 
 
 > [!NOTE]  
-> Please note the script is for Fedora 40 and Kali.
+> Please note the script is for Ubuntu, Fedora 40 and Kali.
+
+## Steps to Apply Configuration
+1. Update Shell Configurations
+
+- Add the necessary configuration lines to the appropriate shell files:
+    - For Fedora and Ubuntu: Modify ~/.bashrc and /root/.bashrc by adding the below lines to the end of the file.
+      ```bash
+      export LOGFILE="/home/user/user_history.log"
+	     export PROMPT_COMMAND='RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'
+      
+      ```
+    - For Kali: Modify ~/.zshrc and /root/.zshrc by adding the below lines to the end of the file.
+      ```bash
+      export LOGFILE="/home/user/user_history.log"
+      # Variable to store the last exit status
+      LAST_EXIT_STATUS=0
+
+      # Pre-execution hook to store the command to be executed
+      preexec() {
+      LAST_CMD=$1  # Store the command to be executed
+      }
+
+      # Precommand hook to log the last command and its status
+      precmd() {
+      LAST_EXIT_STATUS=$?
+      # Check if LAST_CMD is set
+      if [[ -n $LAST_CMD ]]; then
+        local cmd=$LAST_CMD
+        # Log the command with its exit status after execution
+        if [[ $LAST_EXIT_STATUS -eq 0 ]]; then
+            status_message="SUCCESS"
+        else
+            status_message="FAILURE"
+        fi
+
+        # Log the command with its status
+        echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $cmd - $status_message" >> "$LOGFILE"
+      fi
+      # Reset LAST_CMD for the next command
+      unset LAST_CMD
+      }
+
+      # Bind the precmd and preexec functions
+      preexec_functions+=("preexec")
+      ```
+      > [!NOTE]  
+      > You should change the user.
+      
+2. Reload Shell Configurations
+   - Reload the shell configurations by running:
+
+     ```bash
+     source ~/.bashrc && source /root/.bashrc   # For Bash
+     source ~/.zshrc && source /root/.zshrc     # For Zsh
+     ```
+
+
 
 Kali code
 
