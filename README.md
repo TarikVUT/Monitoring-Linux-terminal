@@ -450,6 +450,10 @@ This method collects terminal history using shell scripts and transfers logs usi
 > [!NOTE]  
 > To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
 
+#### The demonstration video
+
+https://github.com/user-attachments/assets/e36200e5-8f9c-4cd1-8d8c-f2c5376947f1
+
 ## The method that meet our requirements.
 
 Since the final method doesn't require any additional packages and doesn't affect OS performance, it was selected. In the following section, we will explore this method in detail and develop a script to simplify configuration application.
@@ -574,7 +578,7 @@ Since the final method doesn't require any additional packages and doesn't affec
 #### The demonstration video
 
 
-https://github.com/user-attachments/assets/e36200e5-8f9c-4cd1-8d8c-f2c5376947f1
+
 
 
 
