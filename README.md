@@ -428,7 +428,8 @@ This method collects terminal history using shell scripts and transfers logs usi
 ### 2. Set up the server to receive the history logs via rsync.
    1- Set Up SSH Authentication (if necessary)
    If you're copying files over SSH, it's better to use SSH keys for authentication rather than typing your password repeatedly.
-       1. Generate an SSH key (on the client side):
+   
+1. Generate an SSH key (on the client side):
       ```bash
         ssh-keygen -t rsa
       ```
