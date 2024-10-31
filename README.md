@@ -28,8 +28,7 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](#rsyslog-rsyslog)
 2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](#audit-rsyslog)
-3. [**Collecting User Input Using auditd and Sending Logs Directly via Audit**](#audit-audit)
-4. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](#code-rsync)
+3. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](#code-rsync)
 
 --------------------------------------------
 
@@ -391,16 +390,8 @@ https://github.com/user-attachments/assets/37a52888-7c08-45dc-b505-984b5562d9f3
 
 -----------------------------------
    
-## 3. Collecting User Input Using auditd and Sending Logs Directly via Audit
- <a name="audit-auditg"></a>
-This approach uses auditd to collect input and directly sends logs to the remote server.
 
-**Steps:**
-**TODO**
-### 1. Configure auditd on the client to track user input.
-### 2. Configure auditd on the server to receive logs from the client.
-
-## 4. Using a Script to Collect History Data and Send it to a Remote Server via rsync
+## 3. Using a Script to Collect History Data and Send it to a Remote Server via rsync
  <a name="code-rsync"></a>
 This method collects terminal history using shell scripts and transfers logs using rsync.
 
