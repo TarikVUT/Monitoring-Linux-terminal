@@ -433,7 +433,7 @@ This method collects terminal history using shell scripts and transfers logs usi
       ```bash
         ssh-keygen -t rsa
       ```
-      2. Copy the SSH key to the server:
+2. Copy the SSH key to the server:
       ```bash
         ssh-copy-id user@server_address
       ```
