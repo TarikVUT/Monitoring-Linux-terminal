@@ -77,6 +77,7 @@ echo "================================="
             sudo apt install -y openssh-server
             sudo systemctl enable ssh
             sudo systemctl start ssh
+            mkdir -p /root/.ssh
 	    mkdir -p /home/$user/.ssh
             chown $user:$user /home/$user/.ssh
 	echo
@@ -90,6 +91,7 @@ echo "================================="
             sudo dnf install -y openssh-server
             sudo systemctl enable sshd
             sudo systemctl start sshd
+            mkdir -p /root/.ssh
 	    mkdir -p /home/$user/.ssh
             chown $user:$user /home/$user/.ssh 
 	echo
@@ -106,6 +108,7 @@ echo "================================="
             sudo systemctl enable ssh
             sudo systemctl start ssh
 	    mkdir -p /home/$user/.ssh
+	    mkdir -p /root/.ssh
      	    chown $user:$user /home/$user/.ssh 
 	echo
             echo "SSH has been installed and enabled on Kali Linux."
@@ -185,8 +188,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo "The user is $user"
+
 # Generate the SSH key if it doesn't exist
 key_path="/home/$user/.ssh/key_for_logs"
+
+echo "The key path is $key_path"
+
 echo "path 2 $key_path"
 if [ -f "$key_path" ]; then
     echo "SSH key already exists at $key_path. Deleting the existing key."
@@ -203,7 +211,14 @@ echo
 # Ask for the username to push the public key
 read -p "Enter the username for SSH: " sshuser
 
+echo
+echo "Change the key's owner"
+echo
+chown $user:$user $key_path
+chown $user:$user "${key_path}.pub"
+
 # Push the public key to the server
+echo "ssh-copy-id -i ${key_path}.pub $sshuser@$server_ip"
 ssh-copy-id -i "${key_path}.pub" "$sshuser@$server_ip"
 if [ $? -eq 0 ]; then
     echo
@@ -216,18 +231,14 @@ else
     exit 1
 fi
 
-echo
-echo "Change the key's owner"
-echo
-chown $user:$user $key_path
-chown $user:$user "${key_path}.pub"
+
 
 
 }
 add_to_zshrc_if_missing() {
 
-user_path="/home/$user/.zshrc"
-root_path="/root/.zshrc"
+user_zshrc_path="/home/$user/.zshrc"
+root_zshrc_path="/root/.zshrc"
 
 add_config(){
 local path="$1"
@@ -267,26 +278,27 @@ preexec_functions+=(\"preexec\")" >> $path
 }
 
 
-if grep -Fxq "export LOGFILE=\"/home/$user/user_history.log\"" $user_path; then
-    echo "The configuration exists in $user_path, please check that....."
+if grep -Fxq "export LOGFILE=\"/home/$user/user_history.log\"" $user_zshrc_path; then
+    echo "The configuration exists in $user_zshrc_path, please check that....."
 else
-    echo "Add the new configuration to $user_path"
-    add_config $user_path
-    echo "source $user_path"
+    echo "Add the new configuration to $user_zshrc_path"
+    add_config $user_zshrc_path
+    echo "source $user_zshrc_path"
     sleep 1
-    zsh -c "source $user_path"
+    zsh -c "source $user_zshrc_path"
 fi
 
 sleep 1
 
-if grep -Fxq "export LOGFILE=\"/home/$user/user_history.log\"" $root_path; then
-    echo "The configuration exists in $root_path, please check that....."
+# Root zshrc
+if grep -Fxq "export LOGFILE=\"/home/$user/user_history.log\"" $root_zshrc_path; then
+    echo "The configuration exists in $root_zshrc_path, please check that....."
 else
-    echo "Add the new configuration to $root_path"
-    add_config $root_path
-    echo "source $root_path"
+    echo "Add the new configuration to $root_zshrc_path"
+    add_config $root_zshrc_path
+    echo "source $root_zshrc_path"
     sleep 1
-    zsh -c "source $user_path"
+    zsh -c "source $root_zshrc_path"
 fi
 sleep 1
 }
@@ -295,7 +307,8 @@ collect_log(){
 echo "================================="
 echo "Config logger in the Client"
 echo "================================="
-
+user_bash_path="/home/$user/.bashrc"
+root_bash_path="/root/.bashrc"
 
         # Fedora 40
         if [ "$ID" = "fedora40" ] || [ "$ID" = "ubuntu" ]; then
@@ -307,24 +320,24 @@ echo "================================="
 	CONFIG1="export LOGFILE=\"/home/$user/user_history.log\""
 	CONFIG2='export PROMPT_COMMAND='\''RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'\'''
 
-	if ! grep -qF "$CONFIG1" ~/.bashrc; then
-   	 echo "$CONFIG1" >> ~/.bashrc
+	if ! grep -qF "$CONFIG1" $user_bash_path; then
+   	 echo "$CONFIG1" >> $user_bash_path
 	fi	
 
-	if ! grep -qF "$CONFIG2" ~/.bashrc; then
-	    echo "$CONFIG2" >> ~/.bashrc
-	    source ~/.bashrc
+	if ! grep -qF "$CONFIG2" $user_bash_path; then
+	    echo "$CONFIG2" >> $user_bash_path
+	    source $user_bash_path
 	fi
 	
 	# For ROOT
 
-	if ! grep -qF "$CONFIG1" ~/.bashrc; then
-	echo "$CONFIG1" >> /root/.bashrc
+	if ! grep -qF "$CONFIG1" $root_bash_path; then
+	echo "$CONFIG1" >> $root_bash_path
 	fi
 
-	if ! grep -qF "$CONFIG2" /root/.bashrc; then
-   	 echo "$CONFIG2" >> /root/.bashrc
-   	 source /root/.bashrc
+	if ! grep -qF "$CONFIG2" $root_bash_path; then
+   	 echo "$CONFIG2" >> $root_bash_path
+   	 source $root_bash_path
 	fi
 
         # Kali
@@ -333,7 +346,7 @@ echo "================================="
 	add_to_zshrc_if_missing
         
         else
-            echo "This script only supports Fedora 40 and Kali."
+            echo "This script only supports Fedora 40, Ubuntu and Kali."
         fi
 
 
