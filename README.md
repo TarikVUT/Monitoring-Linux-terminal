@@ -645,6 +645,10 @@ In case you do not need this service any more, you can delete it by following th
    $ rm -fi ~ user_history.log
    ```
 
+6. Delete the log file in "/var/log/log_sender.log".
+   ``` bash
+   # rm -fi /var/log/log_sender.log
+   ```
 
 #### The demonstration video
 
