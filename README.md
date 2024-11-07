@@ -573,7 +573,78 @@ Since the final method doesn't require any additional packages and doesn't affec
     systemctl daemon-reload
     systemctl restart sync_user_history.service
     ```
-    
+
+## Delete the configuration and sevice
+
+In case you do not need this service any more, you can delete it by follow the steps below:
+
+1. Delete the configuration in ".bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc" (for Kali):
+	- For .bashrc and /root/.bashrc delete the below lines
+	``` bash
+	export LOGFILE="/home/student/user_history.log"
+	export PROMPT_COMMAND='RETRN_VAL=$?; STATUS="SUCCESS"; if [ $RETRN_VAL -ne 0 ]; then STATUS="FAILURE"; fi; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//") - $STATUS" >> $LOGFILE'
+
+ 	```
+	- For .zshrc and /root/.zshrc delete the below lines
+	``` bash
+	export LOGFILE=\"/home/$user/user_history.log\"
+	# Variable to store the last exit status
+	LAST_EXIT_STATUS=0
+
+	# Pre-execution hook to store the command to be executed
+	preexec() {
+   	 LAST_CMD=\$1  # Store the command to be executed
+	}
+
+	# Precommand hook to log the last command and its status
+	precmd() {
+ 	LAST_EXIT_STATUS=\$?
+   	 # Check if LAST_CMD is set
+    	if [[ -n \$LAST_CMD ]]; then
+        	local cmd=\$LAST_CMD
+        # Log the command with its exit status after execution
+        if [[ \$LAST_EXIT_STATUS -eq 0 ]]; then
+            status_message=\"SUCCESS\"
+        else
+            status_message=\"FAILURE\"
+        fi
+
+        # Log the command with its status
+        echo \"\$(date \"+%Y-%m-%d %H:%M:%S\") \$(whoami) \$cmd - \$status_message\" >> \"\$LOGFILE\"
+    	fi
+   	 # Reset LAST_CMD for the next command
+    	unset LAST_CMD
+	}
+
+	# Bind the precmd and preexec functions
+	preexec_functions+=(\"preexec\")
+ 	```
+
+ 2. Reload the .bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc"
+    ``` bash
+	$ source .bashrc
+    	# source /root/.bashrc
+
+ 	## For kali
+    	$ source .zshrc
+    	# source /root/.zshrc
+       ```
+
+3. Stop, delete the sync_user_history.service and reload daemon.
+   ``` bash
+   # systemctl stop sync_user_history.service
+   # rm -fi /etc/systemd/system/sync_user_history.service
+   # systemctl daemon-reload
+   ```
+4. Delete the bash script in /usr/local/bin.
+   ``` bash
+   # rm -fi /usr/local/bin/sync_user_history.sh
+   ```
+5.  Delete the local user's history logs.
+   ``` bash
+   $ rm -fi ~ user_history.log
+   ```
+
 
 #### The demonstration video
 
