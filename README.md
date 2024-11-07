@@ -576,7 +576,7 @@ Since the final method doesn't require any additional packages and doesn't affec
 
 ## Delete the configuration and sevice
 
-In case you do not need this service any more, you can delete it by follow the steps below:
+In case you do not need this service any more, you can delete it by following the steps below:
 
 1. Delete the configuration in ".bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc" (for Kali):
 	- For .bashrc and /root/.bashrc delete the below lines
