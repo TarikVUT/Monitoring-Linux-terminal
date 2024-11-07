@@ -24,12 +24,16 @@ This project provides a comprehensive solution for monitoring and logging termin
 
 --------------------------------------------
 
-## Methods of Collection
+## Overview 
 
-1. [**Configuring rsyslog to Collect User Input and Send it to a Remote Server**](#rsyslog-rsyslog)
-2. [**Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog**](#audit-rsyslog)
-3. [**Using a Script to Collect History Data and Send it to a Remote Server via rsync**](#code-rsync)
-
+- Methods of Collection
+1. [Configuring rsyslog to Collect User Input and Send it to a Remote Server](#rsyslog-rsyslog)
+2. [Collecting User Input Using auditd and Sending Logs to a Remote Server via rsyslog](#audit-rsyslog)
+3. [Using a Script to Collect History Data and Send it to a Remote Server via rsync](#code-rsync)
+   
+- [The method that meet our requirements.](#meth-req)
+- [Delete the configuration and sevice.](#delete-data)
+- [The demonstration video.](#demo-video)
 --------------------------------------------
 
 
@@ -54,12 +58,12 @@ This method uses rsyslog to capture and forward terminal input.
    ```bash
    # systemctl enable rsyslog.
    ```
-  - To log all bash history commands to the syslog add the below line to user ".bashrc" (for all bash session add it to "/etc/bashrc")
+  - To log all bash history commands to the syslog add the below line to user ".bashrc" (for all bash session add it to "/etc/bashrc").
    ```bash
     shopt -s syslog_history
    ```
-   - Write history logs to a separate file through Rsyslog
-    Add the following entry in "/etc/rsyslog.conf" file before the line that sends events to /var/log/messages file or create a config file in "/etc/rsyslog.d" (for example "/etc/rsyslog.d/history.conf")
+   - Write history logs to a separate file through Rsyslog.
+    Add the following entry in "/etc/rsyslog.conf" file before the line that sends events to /var/log/messages file or create a config file in "/etc/rsyslog.d" (for example "/etc/rsyslog.d/history.conf").
 
    ```bash
     if $programname == '-bash' or $programname == 'bash' and $msg contains 'HISTORY:' then {
@@ -86,7 +90,7 @@ This method uses rsyslog to capture and forward terminal input.
    - **Client side**
    
    <a name="send-udp"></a>
-  1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+  1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config.
       
    ```bash
       $ModLoad imfile
@@ -123,7 +127,7 @@ $UDPServerRun 514
 ```
 2.  Configure the rsyslog server to receive events/logs from the client:
 
-Add the following line "/etc/rsyslog.d/history_client.conf"
+Add the following line "/etc/rsyslog.d/history_client.conf".
 
 ```bash
 if ($syslogfacility-text == 'local3') then {
@@ -131,7 +135,7 @@ if ($syslogfacility-text == 'local3') then {
 stop
 }
 ```
-The config will save all received logs to "/var/log/histroy.log" on the server side
+The config will save all received logs to "/var/log/histroy.log" on the server side.
    
 #### The demonstration video
 
@@ -143,7 +147,7 @@ https://github.com/user-attachments/assets/321ac366-4409-43c5-a31b-a4095d3a6f0a
 <a name="tcp"></a>
 - **Client side**
   
-1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config
+1. Create file in "/etc/rsyslog.d/send_history.conf" and ad the below config.
   
   ```bash
       $ModLoad imfile
@@ -180,11 +184,8 @@ if ($syslogfacility-text == 'local3') then {
 stop
 }
 ```
-The config will save all received logs to "/var/log/histroy.log" on the server side
+The config will save all received logs to "/var/log/histroy.log" on the server side.
    
-#### The demonstration video
-
-TODO
 
 ----------------------------------------
 
@@ -400,7 +401,7 @@ This method collects terminal history using shell scripts and transfers logs usi
 **Steps:**
 
 ### 1. Create a script to capture the terminal history and save it to a file.
-   1- Use PROMPT_COMMAND with history
+   1- Use PROMPT_COMMAND with history.
    
    You can modify the PROMPT_COMMAND variable in your shell configuration file (~/.bashrc or ~/.bash_profile) to log every command executed by the user into a specific file.
 
@@ -425,8 +426,8 @@ This method collects terminal history using shell scripts and transfers logs usi
    <img src="https://github.com/TarikVUT/Monitoring-Linux-terminal/blob/main/images/output_of_bashrc_script.png" width="700" />
 
    
-### 2. Set up the server to receive the history logs via rsync.
-   1- Set Up SSH Authentication (if necessary)
+### 2. Set up the server to receive the history logs via rsync
+   1- Set Up SSH Authentication (if necessary).
    If you're copying files over SSH, it's better to use SSH keys for authentication rather than typing your password repeatedly.
    
 1. Generate an SSH key (on the client side):
@@ -437,7 +438,7 @@ This method collects terminal history using shell scripts and transfers logs usi
       ```bash
         ssh-copy-id user@server_address
       ```
-  2- Continuously Sync with a Loop
+  2- Continuously Sync with a Loop.
   To make this process continuous, you can use a loop in the terminal. Here's an example using a bash loop:
    ```bash
        #!/bin/bash
@@ -448,13 +449,14 @@ This method collects terminal history using shell scripts and transfers logs usi
    ```
 
 > [!NOTE]  
-> To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &"
+> To run the bash script in the background, execute the following command "$ sh rsync_sender.sh  &> /dev/null &".
 
 #### The demonstration video
 
 https://github.com/user-attachments/assets/e36200e5-8f9c-4cd1-8d8c-f2c5376947f1
 
 ## The method that meet our requirements.
+<a name="#meth-req"></a>
 
 Since the final method doesn't require any additional packages and doesn't affect OS performance, it was selected. In the following section, we will explore this method in detail and develop a script to simplify configuration application.
 
@@ -517,10 +519,10 @@ Since the final method doesn't require any additional packages and doesn't affec
      source ~/.zshrc && source /root/.zshrc     # For Zsh
      ```
 
-3. Verify Local Log Collection
+3. Verify Local Log Collection.
     - Ensure that the user history (local logs) is being collected on the local machine "/home/user/user_history.log".
 
-4. Establish Passwordless SSH Connection
+4. Establish Passwordless SSH Connection.
     - Set up a passwordless SSH connection between the client and the server.
     ```bash
     # Generate a new SSH key without a passphrase
@@ -542,13 +544,13 @@ Since the final method doesn't require any additional packages and doesn't affec
      sleep 5  # Wait for 5 seconds 
      done
      ```
-   - Make the script exec
+   - Make the script exec.
      ```bash
      #  chmod +x log_sender.sh
      ```
 
-6. Create a Sync Service
-  - Create the log_sync.service in "/etc/systemd/system/"
+6. Create a Sync Service.
+  - Create the log_sync.service in "/etc/systemd/system/".
 
     ```bash
     [Unit]
@@ -564,7 +566,7 @@ Since the final method doesn't require any additional packages and doesn't affec
     WantedBy=multi-user.target
     
     ```
-  - Enable the service to start on boot
+  - Enable the service to start on boot.
     ```bash
     systemctl enable sync_user_history.service	
     ```
@@ -575,17 +577,18 @@ Since the final method doesn't require any additional packages and doesn't affec
     ```
 
 ## Delete the configuration and sevice
+<a name="#delete-data"></a>
 
 In case you do not need this service any more, you can delete it by following the steps below:
 
 1. Delete the configuration in ".bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc" (for Kali):
-	- For .bashrc and /root/.bashrc delete the below lines
+	- For .bashrc and /root/.bashrc delete the below lines.
 	``` bash
 	export LOGFILE="/home/student/user_history.log"
 	export PROMPT_COMMAND='RETRN_VAL=$?; STATUS="SUCCESS"; if [ $RETRN_VAL -ne 0 ]; then STATUS="FAILURE"; fi; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//") - $STATUS" >> $LOGFILE'
 
  	```
-	- For .zshrc and /root/.zshrc delete the below lines
+	- For .zshrc and /root/.zshrc delete the below lines.
 	``` bash
 	export LOGFILE=\"/home/$user/user_history.log\"
 	# Variable to store the last exit status
@@ -620,7 +623,7 @@ In case you do not need this service any more, you can delete it by following th
 	preexec_functions+=(\"preexec\")
  	```
 
- 2. Reload the .bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc"
+ 2. Reload the .bashrc , /root/.bashrc" (for Fedora and Ubuntu), "~.zshrc and /root/.zshrc".
     ``` bash
 	$ source .bashrc
     	# source /root/.bashrc
@@ -651,6 +654,7 @@ In case you do not need this service any more, you can delete it by following th
    ```
 
 #### The demonstration video
+<a name="#demo-video"></a>
 
 
 
