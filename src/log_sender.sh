@@ -200,7 +200,7 @@ echo "================================="
 
 # Ask the user to enter the server IP
 read -p "Enter the server IP: " server_ip
-logger "The entered server IP is $server_ip"
+logger "The entered server's IP is $server_ip"
 
 # Check if the server is reachable
 check_server_ip "$server_ip"
@@ -219,14 +219,14 @@ if [ -f "$key_path" ]; then
     echo "SSH key already exists at $key_path. Deleting the existing key."
     rm "$key_path"
     rm "${key_path}.pub"  # Also remove the public key
-    logger "The key $key_path. Deleting it"
+    logger "The key $key_path is existed. Deleting it"
 fi
 
 # Generate a new SSH key without a passphrase
 ssh-keygen -t rsa -b 2048 -f "$key_path" -N ""
 echo
 echo "SSH key generated at $key_path"
-logger "The new key has been generated a $key_path"
+logger "The new key has been generated in $key_path"
 echo
 
 # Ask for the username to push the public key
@@ -309,8 +309,10 @@ else
     echo "Add the new configuration to $user_zshrc_path"
     add_config $user_zshrc_path
     echo "source $user_zshrc_path"
+    
     sleep 1
     zsh -c "source $user_zshrc_path"
+    logger "source $user_zshrc_path"
 fi
 
 sleep 1
@@ -324,6 +326,7 @@ else
     echo "source $root_zshrc_path"
     sleep 1
     zsh -c "source $root_zshrc_path"
+    logger "source $root_zshrc_path"
 fi
 sleep 1
 }
@@ -436,7 +439,7 @@ fi
     
 if systemctl daemon-reload; then
     echo " Reload the systemd daemon."
-    logger " Reload the systemd daemon."
+    logger "Reload the systemd daemon."
 else
     echo "Failed to reload the systemd daemon."
     logger "Failed to reload the systemd daemon."
