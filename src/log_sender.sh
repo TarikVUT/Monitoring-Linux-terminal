@@ -1,16 +1,20 @@
 #!/bin/sh
 
+# Author: Tarik Alkanan
+# Date: 07.11.2024
+# WARNING: Do not modify this script.
+# This script must be run with sudo privileges and makes changes to sensitive system files.
+# Modifying this script may result in unintended consequences and system instability.
 
-# Save the user in var user, and detect the real user in case the script runs using sudo
-if [ "$SUDO_USER" ]; then
-    user=$SUDO_USER
-else
-    user=$(whoami)
-fi
 
-echo "The real user is: $user"
-key_path="/home/$user/.ssh/key_for_logs"
-echo "path 1 $key_path"
+logger(){
+
+logger_path="/var/log/log_sender.log"
+log_message=$1
+
+echo "$(date +"%F - %r") - $log_message" >> $logger_path
+
+}
 
 detect_os() {
 
@@ -30,6 +34,8 @@ echo "================================="
             echo "The OS is Ubuntu."
 	echo "================="
 	echo
+    logger "The OS is Ubuntu."
+
             return 0
         fi
         
@@ -41,6 +47,7 @@ echo "================================="
            echo "The OS is Fedora 40."
 	echo "================="
 	echo
+    logger "The OS is Fedora 40."
             return 0
         fi
         
@@ -53,13 +60,16 @@ echo "================================="
 	echo "The OS is Kali Linux."
 	echo "================="
 	echo
+    logger "The OS is Kali Linux."
             return 0
         fi
         
         echo "This is neither Fedora 40 nor Kali."
+        logger "This is neither Fedora 40 nor Kali."
         return 1
     else
         echo "/etc/os-release not found. Cannot determine OS."
+        logger "/etc/os-release not found. Cannot determine OS."
         return 1
     fi
 }
@@ -78,8 +88,9 @@ echo "================================="
             sudo systemctl enable ssh
             sudo systemctl start ssh
             mkdir -p /root/.ssh
-	    mkdir -p /home/$user/.ssh
+	        mkdir -p /home/$user/.ssh
             chown $user:$user /home/$user/.ssh
+            logger "SSH has been installed and enabled on Ubuntu."
 	echo
             echo "SSH has been installed and enabled on Ubuntu."
 	echo
@@ -92,8 +103,9 @@ echo "================================="
             sudo systemctl enable sshd
             sudo systemctl start sshd
             mkdir -p /root/.ssh
-	    mkdir -p /home/$user/.ssh
+	        mkdir -p /home/$user/.ssh
             chown $user:$user /home/$user/.ssh 
+            logger "SSH has been installed and enabled on Fedora 40."
 	echo
             echo "SSH has been installed and enabled on Fedora 40."
 	echo
@@ -107,15 +119,17 @@ echo "================================="
             sudo apt install -y openssh-server
             sudo systemctl enable ssh
             sudo systemctl start ssh
-	    mkdir -p /home/$user/.ssh
-	    mkdir -p /root/.ssh
+	        mkdir -p /home/$user/.ssh
+	        mkdir -p /root/.ssh
      	    chown $user:$user /home/$user/.ssh 
+            logger "SSH has been installed and enabled on Kali Linux."
 	echo
             echo "SSH has been installed and enabled on Kali Linux."
 	echo
         
         else
             echo "This script only supports Fedora 40 and Kali."
+            logger "This script only supports Fedora 40, Ubuntu, and Kali."
         fi
 
 }
@@ -138,15 +152,18 @@ read -p "Enter the interface you want to use: " chosen_interface
 	
 echo
 echo "You chose interface: $chosen_interface"
+logger "The entered interface is $chosen_interface"
 
 # Extract the IPv4 address of the chosen interface
 IPv4=$(echo "$interfaces" | grep "^$chosen_interface " | awk '{print $2}')
 
 echo
 echo "IPv4 address: $IPv4"
+logger "The IPv4 of the chosen interface is $IPv4"
 
 if [ -z "$IPv4" ]; then
-    echo "Invalid interface selected."
+    echo "Invalid interface selected. rerun the script and choose the right interface"
+    logger "Invalid interface selected."
     exit 1
 fi
 
@@ -161,17 +178,20 @@ check_server_ip() {
     if [ $? -eq 0 ]; then
         echo
         echo "Server $server_ip is reachable."
+        logger "Server $server_ip is reachable."
         echo
         sleep 2
         return 0
     else
         echo
         echo "Server $server_ip is unreachable."
+        logger "Server $server_ip is unreachable."
         echo
         sleep 2
         return 1
     fi
 }
+
 
 set_server_ip(){
 echo "================================="
@@ -180,36 +200,37 @@ echo "================================="
 
 # Ask the user to enter the server IP
 read -p "Enter the server IP: " server_ip
+logger "The entered server IP is $server_ip"
 
 # Check if the server is reachable
 check_server_ip "$server_ip"
 if [ $? -ne 0 ]; then
-    echo "We can not ping the server, check the server IP"
+    echo "We can not ping the server, check the server IP"   
     exit 1
 fi
 
-echo "The user is $user"
 
 # Generate the SSH key if it doesn't exist
 key_path="/home/$user/.ssh/key_for_logs"
 
 echo "The key path is $key_path"
 
-echo "path 2 $key_path"
 if [ -f "$key_path" ]; then
     echo "SSH key already exists at $key_path. Deleting the existing key."
     rm "$key_path"
     rm "${key_path}.pub"  # Also remove the public key
+    logger "The key $key_path. Deleting it"
 fi
 
 # Generate a new SSH key without a passphrase
 ssh-keygen -t rsa -b 2048 -f "$key_path" -N ""
 echo
 echo "SSH key generated at $key_path"
+logger "The new key has been generated a $key_path"
 echo
 
 # Ask for the username to push the public key
-read -p "Enter the username for SSH: " sshuser
+read -p "Enter the username for SSH (The user in server side): " sshuser
 
 echo
 echo "Change the key's owner"
@@ -217,16 +238,20 @@ echo
 chown $user:$user $key_path
 chown $user:$user "${key_path}.pub"
 
+logger "Change the key's $key_path owner to $user."
+
 # Push the public key to the server
-echo "ssh-copy-id -i ${key_path}.pub $sshuser@$server_ip"
+#echo "ssh-copy-id -i ${key_path}.pub $sshuser@$server_ip"
 ssh-copy-id -i "${key_path}.pub" "$sshuser@$server_ip"
 if [ $? -eq 0 ]; then
     echo
     echo "SSH key successfully copied to $server_ip"
+    logger "SSH key successfully copied to $server_ip"
     echo
 else
     echo
     echo "Failed to copy SSH key to $server_ip"
+    logger "Failed to copy SSH key to $server_ip"
     echo
     exit 1
 fi
@@ -318,38 +343,41 @@ root_bash_path="/root/.bashrc"
 	# feelfree to change it, but may you will face a issue with selinux.
 	##
 	CONFIG1="export LOGFILE=\"/home/$user/user_history.log\""
-	CONFIG2='export PROMPT_COMMAND='\''RETRN_VAL=$?; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")" >> $LOGFILE'\'''
-
+	CONFIG2='export PROMPT_COMMAND='\''RETRN_VAL=$?; STATUS="SUCCESS"; if [ $RETRN_VAL -ne 0 ]; then STATUS="FAILURE"; fi; echo "$(date "+%Y-%m-%d %H:%M:%S") $(whoami) $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//") - $STATUS" >> $LOGFILE'\'''
+   
+    # For user
 	if ! grep -qF "$CONFIG1" $user_bash_path; then
-   	 echo "$CONFIG1" >> $user_bash_path
+   	    echo "$CONFIG1" >> $user_bash_path
 	fi	
 
 	if ! grep -qF "$CONFIG2" $user_bash_path; then
 	    echo "$CONFIG2" >> $user_bash_path
 	    source $user_bash_path
+        logger "source $user_bash_path"
 	fi
 	
 	# For ROOT
-
 	if ! grep -qF "$CONFIG1" $root_bash_path; then
-	echo "$CONFIG1" >> $root_bash_path
+	    echo "$CONFIG1" >> $root_bash_path
 	fi
 
 	if ! grep -qF "$CONFIG2" $root_bash_path; then
-   	 echo "$CONFIG2" >> $root_bash_path
-   	 source $root_bash_path
+   	    echo "$CONFIG2" >> $root_bash_path
+   	    source $root_bash_path
+        logger "source $root_bash_path"
 	fi
 
         # Kali
         elif [ "$ID" = "kali" ]; then
-        
-	add_to_zshrc_if_missing
-        
+	        add_to_zshrc_if_missing
         else
             echo "This script only supports Fedora 40, Ubuntu and Kali."
         fi
 
-
+    # Create /home/$user/user_history.log
+    echo "--------------- Start Log ---------------" >> /home/$user/user_history.log
+    chown $user:$user /home/$user/user_history.log
+    logger "Created /home/$user/user_history.log and set ownership to $user."
 }
 create_logger_services()
 {
@@ -369,7 +397,12 @@ path_sync_service="/etc/systemd/system/sync_user_history.service"
  sleep 5  # Wait for 5 seconds 
  done
  " > $path_sync_sh
- 
+ logger "Create the sync script in $path_sync_sh"
+
+echo "Sync first log"
+ rsync -avz -e "ssh -i $key_path" /home/$user/user_history.log $sshuser@$server_ip:/home/$sshuser/$IPv4.log
+
+
  # Make the script exec
  chmod +x $path_sync_sh
  echo
@@ -388,40 +421,48 @@ User=$user
 WantedBy=multi-user.target
  " > $path_sync_service
  
-
+ logger "Create the sync sevice in $path_sync_service"
 
 # Enable the service to start on boot
 
-    if systemctl enable sync_user_history.service; then
-        echo "Service enabled to start on boot."
-    else
-        echo "Failed to enable the service."
-        return 1  # Exit the function with an error code
-    fi
+if systemctl enable sync_user_history.service; then
+    echo "Service enabled to start on boot."
+    logger "Service enabled to start on boot."
+else
+    echo "Failed to enable the service."
+    logger "Failed to enable the service."
+    return 1  # Exit the function with an error code
+fi
     
-    if systemctl daemon-reload; then
-        echo " Reload the systemd daemon."
-    else
-        echo "Failed to reload the systemd daemon."
-        return 1  # Exit the function with an error code
-    fi   
+if systemctl daemon-reload; then
+    echo " Reload the systemd daemon."
+    logger " Reload the systemd daemon."
+else
+    echo "Failed to reload the systemd daemon."
+    logger "Failed to reload the systemd daemon."
+    return 1  # Exit the function with an error code
+fi   
 
-    # Start the service immediately
-    if systemctl restart sync_user_history.service; then
-        echo "Service started successfully."
-    else
-        echo "Failed to start the service."
-        return 1  # Exit the function with an error code
-    fi
+# Start the service immediately
+if systemctl restart sync_user_history.service; then
+    echo "Service started successfully."
+    logger "Service started successfully."
+else
+    echo "Failed to start the service."
+    logger "Failed to start the service."
+    return 1  # Exit the function with an error code
+fi
     
-    # Check the status of the service
-    echo "Checking the status of sync_user_history.service..."
-    if systemctl status sync_user_history.service; then
-        echo "Service is running."
-    else
-        echo "Service is not running."
-        return 1  # Exit the function with an error code
-    fi
+# Check the status of the service
+echo "Checking the status of sync_user_history.service..."
+if systemctl status sync_user_history.service; then
+    echo "Service is running."
+    logger "Service is running."
+else
+    echo "Service is not running."
+    logger "Service is not running."
+    return 1  # Exit the function with an error code
+fi
 
 
 
@@ -429,11 +470,39 @@ WantedBy=multi-user.target
 
 main(){
 
+# Save the user in var user, and detect the real user in case the script runs using sudo
+if [ "$SUDO_USER" ]; then
+    user=$SUDO_USER
+else
+    user=$(whoami)
+fi
+if [ "$user" = "root" ]; then
+    echo "The script should not be run as root. Exiting."
+    logger "The script was run as root and exited."
+    exit 1
+fi
+
+echo "================================="
+echo "The real user is: $user"
+logger "The real user is: $user"
+echo "================================="
+
+# Detect OS
 detect_os
-install_and_enable_ssh
+
+# Detect the interfaces
 detect_interface
+
+# Install SSHD
+install_and_enable_ssh
+
+# Set the server IP
 set_server_ip
+
+# Collect the user history locally
 collect_log
+
+# Create the sync service
 create_logger_services
 
 
